@@ -4,7 +4,7 @@ cd EIP-3561
 ```
 Then
 ```
-npm run build
+npm run test
 ```
 
 
