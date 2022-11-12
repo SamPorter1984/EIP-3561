@@ -774,7 +774,7 @@ describe("TrustMinimizedProxy",()=>{
       });
       it("proposeTo(address newLogic, bytes calldata data): should fallback to proxy logic execution if called by not an admin", async()=>{
         const { owner,otherAccount,trustMinimizedProxy } = await loadFixture(zeroTrustPeriodSetFirstLogicSetNextLogicBlockPassedFixture);
-      const logicInit = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT);
+        const logicInit = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT);
         const tx = await trustMinimizedProxy.connect(otherAccount).proposeTo(owner.address,"0x");
         await expect(tx).not.to.be.reverted.to.not.emit(trustMinimizedProxy, "Upgraded");
         const logic = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT);
