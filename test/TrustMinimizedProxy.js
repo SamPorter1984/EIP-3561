@@ -544,7 +544,7 @@ describe("TrustMinimizedProxy",()=>{
         const val= await ethers.provider.getStorageAt(trustMinimizedProxy.address, ZERO_TRUST_PERIOD_SLOT);
         expect(valInitial).to.equal(val);
       });
-      it("proposeTo(address newLogic, bytes calldata data): should upgrade if called by admin",async()=>{
+      it("proposeTo(address newLogic, bytes calldata data): should set next logic if called by admin",async()=>{
         const { otherAccount,trustMinimizedProxy} = await loadFixture(trustMinimizedProxyZeroTrustPeriodSetNextLogicBlockPassedFixture);
         await expect(trustMinimizedProxy.proposeTo(otherAccount.address,"0x")).to.emit(trustMinimizedProxy, "NextLogicDefined");
         const logic = ethers.utils.getAddress(ethers.utils.hexStripZeros(await ethers.provider.getStorageAt(trustMinimizedProxy.address, NEXT_LOGIC_SLOT)));
@@ -766,7 +766,7 @@ describe("TrustMinimizedProxy",()=>{
         const val= await ethers.provider.getStorageAt(trustMinimizedProxy.address, ZERO_TRUST_PERIOD_SLOT);
         expect(valInitial).to.equal(val);
       });
-      it("proposeTo(address newLogic, bytes calldata data): should upgrade if called by admin",async()=>{
+      it("proposeTo(address newLogic, bytes calldata data): should set next logic if called by admin",async()=>{
         const { otherAccount,trustMinimizedProxy} = await loadFixture(zeroTrustPeriodSetFirstLogicSetNextLogicBlockPassedFixture);
         await expect(trustMinimizedProxy.proposeTo(otherAccount.address,"0x")).to.emit(trustMinimizedProxy, "NextLogicDefined");
         const logic = ethers.utils.getAddress(ethers.utils.hexStripZeros(await ethers.provider.getStorageAt(trustMinimizedProxy.address, NEXT_LOGIC_SLOT)));
@@ -774,7 +774,7 @@ describe("TrustMinimizedProxy",()=>{
       });
       it("proposeTo(address newLogic, bytes calldata data): should fallback to proxy logic execution if called by not an admin", async()=>{
         const { owner,otherAccount,trustMinimizedProxy } = await loadFixture(zeroTrustPeriodSetFirstLogicSetNextLogicBlockPassedFixture);
-        const logicInit = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT);
+      const logicInit = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT);
         const tx = await trustMinimizedProxy.connect(otherAccount).proposeTo(owner.address,"0x");
         await expect(tx).not.to.be.reverted.to.not.emit(trustMinimizedProxy, "Upgraded");
         const logic = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT);
