@@ -6,6 +6,6 @@ Then
 ```
 npm run test
 ```
-Tell me if you encounter any difficulty, I will dockerize it
+You shouldn't have any issue, but if you do - tell me, I will dockerize it
 
 More info: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-3561.md
