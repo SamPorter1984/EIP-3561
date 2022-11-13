@@ -1,6 +1,6 @@
 To test clone the repo, then
 ```
-cd EIP-3561
+cd EIP-3561-tests
 ```
 Then
 ```
