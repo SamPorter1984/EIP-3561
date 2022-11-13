@@ -1,11 +1,10 @@
-To test clone the repo, then
+To test:
 ```
-cd EIP-3561-tests
+git clone https://github.com/SamPorter1984/EIP-3561-tests && cd EIP-3561-tests && npm run test
 ```
-Then
-```
-npm run test
-```
-You shouldn't have any issue, but if you do - tell me, I will dockerize it
+
+Today, there are still issues with delegatecall support in hardhat, so not covering that.
+
+If you have any issue - tell me, I will dockerize it
 
 More info: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-3561.md
