@@ -1,16 +1,15 @@
 require("@nomicfoundation/hardhat-toolbox");
-/** @type import('hardhat/config').HardhatUserConfig */
+require("solidity-coverage");
 module.exports = {
   defaultNetwork: "hardhat",
   networks: {
-    hardhat: {
-    },
+    hardhat: {},
     ganache: {
-      url: "http://127.0.0.1:7545"
-    }
+      url: "http://127.0.0.1:7545",
+    },
   },
   solidity: {
-    compilers:[
+    compilers: [
       {
         version: "0.8.17",
       },
@@ -22,10 +21,10 @@ module.exports = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 999999
-          }
-        }
-      }
-    ]
-  }
+            runs: 999999,
+          },
+        },
+      },
+    ],
+  },
 };

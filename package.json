@@ -1,12 +1,12 @@
 {
-  "name": "project",
+  "name": "EIP3561proxy",
   "version": "1.0.0",
-  "description": "",
+  "description": "Trustless upgradeability proxy for anonymous developers",
   "main": "index.js",
   "scripts": {
-    "test": "npm i hardhat && npx hardhat && npx hardhat test"
+    "test": "npm install && npx hardhat coverage"
   },
-  "author": "",
+  "author": "SamPorter1894",
   "license": "ISC",
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",
@@ -25,9 +25,12 @@
     "ethers": "^5.7.2",
     "hardhat": "^2.12.2",
     "hardhat-gas-reporter": "^1.0.9",
-    "solidity-coverage": "^0.8.2",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.1",
     "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "save": "^2.9.0",
+    "solidity-coverage": "^0.8.2"
   }
 }
