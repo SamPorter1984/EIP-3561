@@ -27,10 +27,7 @@
     "hardhat-gas-reporter": "^1.0.9",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.1",
-    "typescript": "^4.8.4"
-  },
-  "dependencies": {
-    "save": "^2.9.0",
+    "typescript": "^4.8.4",
     "solidity-coverage": "^0.8.2"
   }
 }
