@@ -1,5 +1,5 @@
 const MockTokenABI = require('../artifacts/contracts/MockToken.sol/MockToken.json')
-const { time } = require('@nomicfoundation/hardhat-network-helpers')
+const { time, loadFixture } = require('@nomicfoundation/hardhat-network-helpers')
 
 async function deployTrustMinimizedProxyFixture() {
   const [owner, otherAccount, acc2] = await ethers.getSigners()

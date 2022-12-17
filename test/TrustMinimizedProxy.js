@@ -1,3 +1,4 @@
+const { loadFixture } = require('@nomicfoundation/hardhat-network-helpers')
 const { expect } = require('chai')
 const {
   deployTrustMinimizedProxyFixture,
@@ -23,7 +24,7 @@ let mockLogic = {}
 describe('TrustMinimizedProxy', () => {
   describe('AFTER DEPLOYMENT', () => {
     beforeEach('deploy fixture', async () => {
-      const fixture = await deployTrustMinimizedProxyFixture()
+      const fixture = await loadFixture(deployTrustMinimizedProxyFixture)
       owner = fixture.owner
       otherAccount = fixture.otherAccount
       trustMinimizedProxy = fixture.trustMinimizedProxy
@@ -117,7 +118,7 @@ describe('TrustMinimizedProxy', () => {
 
   describe('AFTER FIRST LOGIC SET', () => {
     beforeEach('deploy fixture', async () => {
-      const fixture = await trustMinimizedProxyFirstLogicSetFixture()
+      const fixture = await loadFixture(trustMinimizedProxyFirstLogicSetFixture)
       owner = fixture.owner
       otherAccount = fixture.otherAccount
       trustMinimizedProxy = fixture.trustMinimizedProxy
@@ -158,7 +159,7 @@ describe('TrustMinimizedProxy', () => {
   describe('AFTER ZEROTRUSTPERIOD SET', () => {
     describe("If nextLogicBlock wasn't reached yet", () => {
       beforeEach('deploy fixture', async () => {
-        const fixture = await trustMinimizedProxyZeroTrustPeriodSetFixture()
+        const fixture = await loadFixture(trustMinimizedProxyZeroTrustPeriodSetFixture)
         owner = fixture.owner
         otherAccount = fixture.otherAccount
         trustMinimizedProxy = fixture.trustMinimizedProxy
@@ -200,7 +201,7 @@ describe('TrustMinimizedProxy', () => {
 
     describe('If nextLogicBlock has passed', () => {
       beforeEach('deploy fixture', async () => {
-        const fixture = await trustMinimizedProxyZeroTrustPeriodSetNextLogicBlockPassedFixture()
+        const fixture = await loadFixture(trustMinimizedProxyZeroTrustPeriodSetNextLogicBlockPassedFixture)
         owner = fixture.owner
         otherAccount = fixture.otherAccount
         trustMinimizedProxy = fixture.trustMinimizedProxy
@@ -241,7 +242,7 @@ describe('TrustMinimizedProxy', () => {
   describe('AFTER ZEROTRUSTPERIOD SET AND FIRST LOGIC SET', () => {
     describe("If nextLogicBlock wasn't reached yet", () => {
       beforeEach('deploy fixture', async () => {
-        const fixture = await zeroTrustPeriodSetFirstLogicSetFixture()
+        const fixture = await loadFixture(zeroTrustPeriodSetFirstLogicSetFixture)
         owner = fixture.owner
         otherAccount = fixture.otherAccount
         trustMinimizedProxy = fixture.trustMinimizedProxy
@@ -296,7 +297,7 @@ describe('TrustMinimizedProxy', () => {
 
     describe('If nextLogicBlock has passed', () => {
       beforeEach('deploy fixture', async () => {
-        const fixture = await zeroTrustPeriodSetFirstLogicSetNextLogicBlockPassedFixture()
+        const fixture = await loadFixture(zeroTrustPeriodSetFirstLogicSetNextLogicBlockPassedFixture)
         owner = fixture.owner
         otherAccount = fixture.otherAccount
         trustMinimizedProxy = fixture.trustMinimizedProxy
