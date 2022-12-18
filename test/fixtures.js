@@ -21,7 +21,7 @@ async function trustMinimizedProxyWithMockLogicFixture() {
   const init = iMockToken.encodeFunctionData('init', [otherAccount.address])
   await trustMinimizedProxy.proposeTo(mockLogic.address, init)
   const trustMinimizedProxyWithLogic = await mockLogic.attach(trustMinimizedProxy.address)
-  return { trustMinimizedProxyWithLogic, owner, otherAccount, mockLogic, acc2 }
+  return { trustMinimizedProxy, trustMinimizedProxyWithLogic, owner, otherAccount, mockLogic, acc2 }
 }
 
 module.exports = {

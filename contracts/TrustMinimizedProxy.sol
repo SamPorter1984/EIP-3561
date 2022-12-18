@@ -157,7 +157,7 @@ contract TrustMinimizedProxy {
     }
 
     function proposeTo(address newLogic, bytes calldata data) external payable IfAdmin {
-        if (_zeroTrustPeriod() == 0) {
+        if (_zeroTrustPeriod() == 0 || _logic() == address(0)) {
             _updateNextBlockSlot();
             assembly {
                 sstore(LOGIC_SLOT, newLogic)
