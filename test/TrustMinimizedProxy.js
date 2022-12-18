@@ -30,95 +30,53 @@ describe('TrustMinimizedProxy', () => {
       trustMinimizedProxy = fixture.trustMinimizedProxy
       mockLogic = fixture.mockLogic
     })
-    it('Should confirm ADMIN_SLOT is valid', async () => {
+    it('Should confirm ADMIN_SLOT, LOGIC_SLOT, NEXT_LOGIC_SLOT, NEXT_LOGIC_BLOCK_SLOT, PROPOSE_BLOCK_SLOT, ZERO_TRUST_PERIOD_SLOT are valid', async () => {
       const adminSlot = ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('eip1967.proxy.admin')))
         .sub(ethers.BigNumber.from(1))
         .toHexString()
       expect(adminSlot).to.equal(ADMIN_SLOT)
-    })
-    it('Should confirm LOGIC_SLOT is valid', async () => {
       const logicSlot = ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('eip1967.proxy.implementation')))
         .sub(ethers.BigNumber.from(1))
         .toHexString()
       expect(logicSlot).to.equal(LOGIC_SLOT)
-    })
-    it('Should confirm NEXT_LOGIC_SLOT is valid', async () => {
       const nextLogicSlot = ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('eip3561.proxy.next.logic')))
         .sub(ethers.BigNumber.from(1))
         .toHexString()
       expect(nextLogicSlot).to.equal(NEXT_LOGIC_SLOT)
-    })
-    it('Should confirm NEXT_LOGIC_BLOCK_SLOT is valid', async () => {
       const nextLogicBlockSlot = ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('eip3561.proxy.next.logic.block')))
         .sub(ethers.BigNumber.from(1))
         .toHexString()
       expect(nextLogicBlockSlot).to.equal(NEXT_LOGIC_BLOCK_SLOT)
-    })
-    it('Should confirm PROPOSE_BLOCK_SLOT is valid', async () => {
       const proposeBlockSlot = ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('eip3561.proxy.propose.block')))
         .sub(ethers.BigNumber.from(1))
         .toHexString()
       expect(proposeBlockSlot).to.equal(PROPOSE_BLOCK_SLOT)
-    })
-    it('Should confirm ZERO_TRUST_PERIOD_SLOT is valid', async () => {
       const zeroTrustPeriodSlot = ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('eip3561.proxy.zero.trust.period')))
         .sub(ethers.BigNumber.from(1))
         .toHexString()
       expect(zeroTrustPeriodSlot).to.equal(ZERO_TRUST_PERIOD_SLOT)
     })
-    it('Should set the right owner(msg.sender)', async () => {
+    it('Should confirm ADMIN_SLOT, LOGIC_SLOT, NEXT_LOGIC_SLOT, NEXT_LOGIC_BLOCK_SLOT, PROPOSE_BLOCK_SLOT, ZERO_TRUST_PERIOD_SLOT initial values', async () => {
       const adminAddress = ethers.utils.getAddress(ethers.utils.hexStripZeros(await ethers.provider.getStorageAt(trustMinimizedProxy.address, ADMIN_SLOT)))
       expect(adminAddress).to.equal(owner.address)
-    })
-    it('Should have LOGIC_SLOT empty', async () => {
-      const slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT)
+      let slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT)
       expect(slotVal).to.equal(ethers.constants.HashZero)
-    })
-    it('Should have NEXT_LOGIC_SLOT empty', async () => {
-      const slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, NEXT_LOGIC_SLOT)
+      slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, NEXT_LOGIC_SLOT)
       expect(slotVal).to.equal(ethers.constants.HashZero)
-    })
-    it('Should have NEXT_LOGIC_BLOCK_SLOT empty', async () => {
-      const slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, NEXT_LOGIC_BLOCK_SLOT)
+      slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, NEXT_LOGIC_BLOCK_SLOT)
       expect(slotVal).to.equal(ethers.constants.HashZero)
-    })
-    it('Should have PROPOSE_BLOCK_SLOT empty', async () => {
-      const slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, PROPOSE_BLOCK_SLOT)
+      slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, PROPOSE_BLOCK_SLOT)
       expect(slotVal).to.equal(ethers.constants.HashZero)
-    })
-    it('Should have PROPOSE_BLOCK_SLOT empty', async () => {
-      const slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, PROPOSE_BLOCK_SLOT)
+      slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, PROPOSE_BLOCK_SLOT)
       expect(slotVal).to.equal(ethers.constants.HashZero)
-    })
-    it('Should have ZERO_TRUST_PERIOD_SLOT empty', async () => {
-      const slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, ZERO_TRUST_PERIOD_SLOT)
+      slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, ZERO_TRUST_PERIOD_SLOT)
       expect(slotVal).to.equal(ethers.constants.HashZero)
-    })
-
-    describe('IfAdmin Interactions', () => {
-      it('changeAdmin(address newAdm): should change admin if called by admin', shouldChangeAdminIfAdmin)
-      it('changeAdmin(address newAdm): should fallback to proxy logic execution if called by not an admin', changeAdminshouldFallbackToLogicIfNotAdmin)
-      it('upgrade(bytes calldata data): should upgrade logic slot to next logic slot if called by admin', shouldUpgradeLogicSlotToNextLogicSlotIfAdmin)
-      it('upgrade(bytes calldata data): should fallback to proxy logic execution if called by not an admin', upgradeShouldFallbackToLogicIfNotAdmin)
-      it('cancelUpgrade(): should cancel upgrade to next logic slot if called by admin', shouldCancelUpgradeIfAdmin)
-      it('cancelUpgrade(): should fallback to proxy logic execution if called by not an admin', cancelUpgradeShouldFallbackToLogicIfNotAdmin)
-      it('prolongLock(uint b): should increase PROPOSE_BLOCK_SLOT value if called by admin', shouldIncreasePROPOSE_BLOCK_SLOTifAdmin)
-      it('prolongLock(uint b): should increase PROPOSE_BLOCK_SLOT value to max uint256 if called by admin', shouldIncreasePROPOSE_BLOCK_SLOTtoMaxUint256ifAdmin)
-      it('prolongLock(uint b): should fallback to proxy logic execution if called by not an admin', prolongLockShouldFallbackToLogicIfNotAdmin)
-      it('setZeroTrustPeriod(uint blocks): should change ZERO_TRUST_PERIOD_SLOT value if called by admin', shouldChangeZERO_TRUST_PERIOD_SLOTifAdmin)
-      it(
-        'setZeroTrustPeriod(uint blocks): should fail to change ZERO_TRUST_PERIOD_SLOT value to max uint256 if called by admin',
-        shouldFailToChangeZERO_TRUST_PERIOD_SLOTtoMaxUint256ifAdmin
-      )
-      it('setZeroTrustPeriod(uint blocks): should fallback to proxy logic execution if called by not an admin', setZeroTrustPeriodShouldFallbackToLogicIfNotAdmin)
-      it('proposeTo(address newLogic, bytes calldata data): should upgrade if called by admin', shouldUpgradeIfAdmin)
-      it('proposeTo(address newLogic, bytes calldata data): should fallback to proxy logic execution if called by not an admin', proposeToShouldFallbackToAddress0IfNotAdmin)
     })
   })
 
-  describe('AFTER FIRST LOGIC SET', () => {
+  describe('IfAdmin Interactions', () => {
     beforeEach('deploy fixture', async () => {
-      const fixture = await loadFixture(trustMinimizedProxyFirstLogicSetFixture)
+      const fixture = await loadFixture(deployTrustMinimizedProxyFixture)
       owner = fixture.owner
       otherAccount = fixture.otherAccount
       trustMinimizedProxy = fixture.trustMinimizedProxy
@@ -140,12 +98,22 @@ describe('TrustMinimizedProxy', () => {
     )
     it('setZeroTrustPeriod(uint blocks): should fallback to proxy logic execution if called by not an admin', setZeroTrustPeriodShouldFallbackToLogicIfNotAdmin)
     it('proposeTo(address newLogic, bytes calldata data): should upgrade if called by admin', shouldUpgradeIfAdmin)
-    it('proposeTo(address newLogic, bytes calldata data): should fallback to proxy logic execution if called by not an admin', proposeToShouldFallbackToLogicIfNotAdmin)
-    it('changeState(uint _state): should fail to changeState if called by admin', async () => {
+    it('proposeTo(address newLogic, bytes calldata data): should fallback to address 0 if called by not an admin', proposeToShouldFallbackToAddress0IfNotAdmin)
+  })
+
+  describe('AFTER FIRST LOGIC SET', () => {
+    beforeEach('deploy fixture', async () => {
+      const fixture = await loadFixture(trustMinimizedProxyFirstLogicSetFixture)
+      owner = fixture.owner
+      otherAccount = fixture.otherAccount
+      trustMinimizedProxy = fixture.trustMinimizedProxy
+      mockLogic = fixture.mockLogic
+    })
+    it('changeMockLogicState(uint _state): should fail to changeState if called by admin', async () => {
       let instance = await mockLogic.attach(trustMinimizedProxy.address)
       expect(instance.changeState(6)).to.be.reverted
     })
-    it('changeState(uint _state): should changeState if called by not an admin', async () => {
+    it('changeMockLogicState(uint _state): should changeState if called by not an admin', async () => {
       let instance = await mockLogic.connect(otherAccount).attach(trustMinimizedProxy.address)
       const valInitial = await instance.state()
       const arg = 6
@@ -153,6 +121,13 @@ describe('TrustMinimizedProxy', () => {
       expect(await instance.state())
         .to.equal(arg)
         .not.to.equal(valInitial)
+    })
+    it('proposeTo(address newLogic, bytes calldata data): should fallback to proxy logic execution if called by not an admin', async () => {
+      const logicInit = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT)
+      const tx = await trustMinimizedProxy.connect(otherAccount).proposeTo(owner.address, '0x')
+      expect(tx).not.to.be.reverted.to.emit(mockLogic, 'FallbackTriggered')
+      const logic = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT)
+      expect(logic).to.equal(logicInit)
     })
   })
 
@@ -165,38 +140,19 @@ describe('TrustMinimizedProxy', () => {
         trustMinimizedProxy = fixture.trustMinimizedProxy
         mockLogic = fixture.mockLogic
       })
-      it('changeAdmin(address newAdm): should change admin if called by admin', shouldChangeAdminIfAdmin)
-      it('changeAdmin(address newAdm): should fallback to proxy logic execution if called by not an admin', changeAdminshouldFallbackToLogicIfNotAdmin)
-      it('upgrade(bytes calldata data): should fail to upgrade logic slot to next logic slot if called by admin', async () => {
-        await expect(trustMinimizedProxy.upgrade('0x')).to.be.reverted
-      })
-      it('upgrade(bytes calldata data): should fallback to proxy logic execution if called by not an admin', upgradeShouldFallbackToLogicIfNotAdmin)
-      it('cancelUpgrade(): should cancel upgrade to next logic slot if called by admin', shouldCancelUpgradeIfAdmin)
-      it('cancelUpgrade(): should fallback to proxy logic execution if called by not an admin', cancelUpgradeShouldFallbackToLogicIfNotAdmin)
-      it('prolongLock(uint b): should increase PROPOSE_BLOCK_SLOT value if called by admin', shouldIncreasePROPOSE_BLOCK_SLOTifAdmin)
-      it('prolongLock(uint b): should fail to increase PROPOSE_BLOCK_SLOT value to max uint256 if called by admin', async () => {
+      it('prolongLock(uint b): should fail to increase PROPOSE_BLOCK_SLOT value to max uint256', async () => {
         const arg = ethers.constants.MaxUint256
         await expect(trustMinimizedProxy.prolongLock(arg)).to.be.reverted
       })
-      it('prolongLock(uint b): should fallback to proxy logic execution if called by not an admin', prolongLockShouldFallbackToLogicIfNotAdmin)
       it(
-        'setZeroTrustPeriod(uint blocks): should change ZERO_TRUST_PERIOD_SLOT value if called by admin and the value is higher than previous',
+        'setZeroTrustPeriod(uint blocks): should change ZERO_TRUST_PERIOD_SLOT value and the value is higher than previous',
         shouldChangeZERO_TRUST_PERIOD_SLOTifAdminAndValueHigherThanPrevious
       )
       it(
-        'setZeroTrustPeriod(uint blocks): should fail to change ZERO_TRUST_PERIOD_SLOT value to max uint256 if called by admin',
-        shouldFailToChangeZERO_TRUST_PERIOD_SLOTtoMaxUint256ifAdmin
-      )
-      it(
-        'setZeroTrustPeriod(uint blocks): should fail to change value if called by admin and the value is not higher than previous',
+        'setZeroTrustPeriod(uint blocks): should fail to change value and the value is not higher than previous',
         shouldFailToChangeZERO_TRUST_PERIOD_SLOTifAdminAndValueNotHigherThanPrevious
       )
-      it('setZeroTrustPeriod(uint blocks): should fallback to proxy logic execution if called by not an admin', setZeroTrustPeriodShouldFallbackToLogicIfNotAdmin)
-      it(
-        'proposeTo(address newLogic, bytes calldata data): should fail to instantly upgrade if called by admin, sets next logic instead',
-        shouldFailToInstantlyUpgradeIfAdminSetsNextLogicInstead
-      )
-      it('proposeTo(address newLogic, bytes calldata data): should fallback to address 0 if called by not an admin', proposeToShouldFallbackToAddress0IfNotAdmin)
+      it('proposeTo(address newLogic, bytes calldata data): should fail to instantly upgrade, sets next logic instead', shouldFailToInstantlyUpgradeIfAdminSetsNextLogicInstead)
     })
 
     describe('If nextLogicBlock has passed', () => {
@@ -207,35 +163,7 @@ describe('TrustMinimizedProxy', () => {
         trustMinimizedProxy = fixture.trustMinimizedProxy
         mockLogic = fixture.mockLogic
       })
-      it('changeAdmin(address newAdm): should change admin if called by admin', shouldChangeAdminIfAdmin)
-      it('changeAdmin(address newAdm): should fallback to proxy logic execution if called by not an admin', changeAdminshouldFallbackToLogicIfNotAdmin)
-      it('upgrade(bytes calldata data): should upgrade logic slot to next logic slot if called by admin', shouldUpgradeLogicSlotToNextLogicSlotIfAdmin)
-      it('upgrade(bytes calldata data): should fallback to proxy logic execution if called by not an admin', upgradeShouldFallbackToLogicIfNotAdmin)
-      it('cancelUpgrade(): should cancel upgrade to next logic slot if called by admin', shouldCancelUpgradeIfAdmin)
-      it('cancelUpgrade(): should fallback to proxy logic execution if called by not an admin', cancelUpgradeShouldFallbackToLogicIfNotAdmin)
-      it('prolongLock(uint b): should increase PROPOSE_BLOCK_SLOT value if called by admin', shouldIncreasePROPOSE_BLOCK_SLOTifAdmin)
-      it('prolongLock(uint b): should fail to increase PROPOSE_BLOCK_SLOT value to max uint256 if called by admin', async () => {
-        const arg = ethers.constants.MaxUint256
-        await expect(trustMinimizedProxy.prolongLock(arg)).to.be.reverted
-      })
-      it('prolongLock(uint b): should fallback to proxy logic execution if called by not an admin', prolongLockShouldFallbackToLogicIfNotAdmin)
-      it('setZeroTrustPeriod(uint blocks): should change ZERO_TRUST_PERIOD_SLOT value if called by admin', async () => {
-        const arg = 2
-        await expect(trustMinimizedProxy.setZeroTrustPeriod(arg)).to.emit(trustMinimizedProxy, 'ZeroTrustPeriodSet')
-        const val = await ethers.provider.getStorageAt(trustMinimizedProxy.address, ZERO_TRUST_PERIOD_SLOT)
-        expect(ethers.BigNumber.from(arg)).to.equal(val)
-      })
-      it(
-        'setZeroTrustPeriod(uint blocks): should fail to change ZERO_TRUST_PERIOD_SLOT value to max uint256 if called by admin',
-        shouldFailToChangeZERO_TRUST_PERIOD_SLOTtoMaxUint256ifAdmin
-      )
-      it(
-        'setZeroTrustPeriod(uint blocks): should fail to change value if called by admin and the value is not higher than previous',
-        shouldFailToChangeZERO_TRUST_PERIOD_SLOTifAdminAndValueNotHigherThanPrevious
-      )
-      it('setZeroTrustPeriod(uint blocks): should fallback to proxy logic execution if called by not an admin', setZeroTrustPeriodShouldFallbackToLogicIfNotAdmin)
-      it('proposeTo(address newLogic, bytes calldata data): should set next logic if called by admin', shouldSetNextLogicIfAdmin)
-      it('proposeTo(address newLogic, bytes calldata data): should fallback to address 0 if called by not an admin', proposeToShouldFallbackToAddress0IfNotAdmin)
+      it('proposeTo(address newLogic, bytes calldata data): should set next logic', shouldSetNextLogicIfAdmin)
     })
   })
 
@@ -248,50 +176,8 @@ describe('TrustMinimizedProxy', () => {
         trustMinimizedProxy = fixture.trustMinimizedProxy
         mockLogic = fixture.mockLogic
       })
-      it('changeAdmin(address newAdm): should change admin if called by admin', shouldChangeAdminIfAdmin)
-      it('changeAdmin(address newAdm): should fallback to proxy logic execution if called by not an admin', changeAdminshouldFallbackToLogicIfNotAdmin)
-      it('upgrade(bytes calldata data): should fail to upgrade logic slot to next logic slot if called by admin', async () => {
+      it('upgrade(bytes calldata data): should fail to upgrade logic slot to next logic slot', async () => {
         await expect(trustMinimizedProxy.upgrade('0x')).to.be.reverted
-      })
-      it('upgrade(bytes calldata data): should fallback to proxy logic execution if called by not an admin', upgradeShouldFallbackToLogicIfNotAdmin)
-      it('cancelUpgrade(): should cancel upgrade to next logic slot if called by admin', shouldCancelUpgradeIfAdmin)
-      it('cancelUpgrade(): should fallback to proxy logic execution if called by not an admin', cancelUpgradeShouldFallbackToLogicIfNotAdmin)
-      it('prolongLock(uint b): should increase PROPOSE_BLOCK_SLOT value if called by admin', shouldIncreasePROPOSE_BLOCK_SLOTifAdmin)
-      it('prolongLock(uint b): should fail to increase PROPOSE_BLOCK_SLOT value to max uint256 if called by admin', async () => {
-        const arg = ethers.constants.MaxUint256
-        await expect(trustMinimizedProxy.prolongLock(arg)).to.be.reverted
-      })
-      it('prolongLock(uint b): should fallback to proxy logic execution if called by not an admin', prolongLockShouldFallbackToLogicIfNotAdmin)
-      it(
-        'setZeroTrustPeriod(uint blocks): should change ZERO_TRUST_PERIOD_SLOT value if called by admin and the value is higher than previous',
-        shouldChangeZERO_TRUST_PERIOD_SLOTifAdminAndValueHigherThanPrevious
-      )
-      it(
-        'setZeroTrustPeriod(uint blocks): should fail to change ZERO_TRUST_PERIOD_SLOT value to max uint256 if called by admin',
-        shouldFailToChangeZERO_TRUST_PERIOD_SLOTtoMaxUint256ifAdmin
-      )
-      it(
-        'setZeroTrustPeriod(uint blocks): should fail to change value if called by admin and the value is not higher than previous',
-        shouldFailToChangeZERO_TRUST_PERIOD_SLOTifAdminAndValueNotHigherThanPrevious
-      )
-      it('setZeroTrustPeriod(uint blocks): should fallback to proxy logic execution if called by not an admin', setZeroTrustPeriodShouldFallbackToLogicIfNotAdmin)
-      it(
-        'proposeTo(address newLogic, bytes calldata data): should fail to instantly upgrade if called by admin, sets next logic instead',
-        shouldFailToInstantlyUpgradeIfAdminSetsNextLogicInstead
-      )
-      it('proposeTo(address newLogic, bytes calldata data): should fallback to proxy logic execution if called by not an admin', proposeToShouldFallbackToLogicIfNotAdmin)
-      it('changeState(uint _state): should fail to changeState if called by admin', async () => {
-        let instance = await mockLogic.attach(trustMinimizedProxy.address)
-        expect(instance.changeState(6)).to.be.reverted
-      })
-      it('changeState(uint _state): should changeState if called by not an admin', async () => {
-        let instance = await mockLogic.connect(otherAccount).attach(trustMinimizedProxy.address)
-        const valInitial = await instance.state()
-        const arg = 6
-        expect(await instance.changeState(arg)).not.to.be.reverted
-        expect(await instance.state())
-          .to.equal(arg)
-          .not.to.equal(valInitial)
       })
     })
 
@@ -303,46 +189,7 @@ describe('TrustMinimizedProxy', () => {
         trustMinimizedProxy = fixture.trustMinimizedProxy
         mockLogic = fixture.mockLogic
       })
-      it('changeAdmin(address newAdm): should change admin if called by admin', shouldChangeAdminIfAdmin)
-      it('changeAdmin(address newAdm): should fallback to proxy logic execution if called by not an admin', changeAdminshouldFallbackToLogicIfNotAdmin)
-      it('upgrade(bytes calldata data): should upgrade logic slot to next logic slot if called by admin', shouldUpgradeLogicSlotToNextLogicSlotIfAdmin)
-      it('upgrade(bytes calldata data): should fallback to proxy logic execution if called by not an admin', upgradeShouldFallbackToLogicIfNotAdmin)
-      it('cancelUpgrade(): should cancel upgrade to next logic slot if called by admin', shouldCancelUpgradeIfAdmin)
-      it('cancelUpgrade(): should fallback to proxy logic execution if called by not an admin', cancelUpgradeShouldFallbackToLogicIfNotAdmin)
-      it('prolongLock(uint b): should increase PROPOSE_BLOCK_SLOT value if called by admin', shouldIncreasePROPOSE_BLOCK_SLOTifAdmin)
-      it('prolongLock(uint b): should fail to increase PROPOSE_BLOCK_SLOT value to max uint256 if called by admin', async () => {
-        const arg = ethers.constants.MaxUint256
-        await expect(trustMinimizedProxy.prolongLock(arg)).to.be.reverted
-      })
-      it('prolongLock(uint b): should fallback to proxy logic execution if called by not an admin', prolongLockShouldFallbackToLogicIfNotAdmin)
-      it(
-        'setZeroTrustPeriod(uint blocks): should change ZERO_TRUST_PERIOD_SLOT value if called by admin and the value is higher than previous',
-        shouldChangeZERO_TRUST_PERIOD_SLOTifAdminAndValueHigherThanPrevious
-      )
-      it(
-        'setZeroTrustPeriod(uint blocks): should fail to change ZERO_TRUST_PERIOD_SLOT value to max uint256 if called by admin',
-        shouldFailToChangeZERO_TRUST_PERIOD_SLOTtoMaxUint256ifAdmin
-      )
-      it(
-        'setZeroTrustPeriod(uint blocks): should fail to change value if called by admin and the value is not higher than previous',
-        shouldFailToChangeZERO_TRUST_PERIOD_SLOTifAdminAndValueNotHigherThanPrevious
-      )
-      it('setZeroTrustPeriod(uint blocks): should fallback to proxy logic execution if called by not an admin', setZeroTrustPeriodShouldFallbackToLogicIfNotAdmin)
-      it('proposeTo(address newLogic, bytes calldata data): should set next logic if called by admin', shouldSetNextLogicIfAdmin)
-      it('proposeTo(address newLogic, bytes calldata data): should fallback to proxy logic execution if called by not an admin', proposeToShouldFallbackToLogicIfNotAdmin)
-      it('changeState(uint _state): should fail to changeState if called by admin', async () => {
-        let instance = await mockLogic.attach(trustMinimizedProxy.address)
-        expect(instance.changeState(6)).to.be.reverted
-      })
-      it('changeState(uint _state): should changeState if called by not an admin', async () => {
-        let instance = await mockLogic.connect(otherAccount).attach(trustMinimizedProxy.address)
-        const valInitial = await instance.state()
-        const arg = 6
-        expect(await instance.changeState(arg)).not.to.be.reverted
-        expect(await instance.state())
-          .to.equal(arg)
-          .not.to.equal(valInitial)
-      })
+      it('proposeTo(address newLogic, bytes calldata data): should set next logic', shouldSetNextLogicIfAdmin)
     })
   })
 })
@@ -473,14 +320,6 @@ async function proposeToShouldFallbackToAddress0IfNotAdmin() {
   const logicInit = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT)
   const tx = await trustMinimizedProxy.connect(otherAccount).proposeTo(owner.address, '0x')
   expect(tx).not.to.be.reverted.to.not.emit(trustMinimizedProxy, 'Upgraded')
-  const logic = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT)
-  expect(logic).to.equal(logicInit)
-}
-
-async function proposeToShouldFallbackToLogicIfNotAdmin() {
-  const logicInit = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT)
-  const tx = await trustMinimizedProxy.connect(otherAccount).proposeTo(owner.address, '0x')
-  expect(tx).not.to.be.reverted.to.emit(mockLogic, 'FallbackTriggered')
   const logic = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT)
   expect(logic).to.equal(logicInit)
 }
