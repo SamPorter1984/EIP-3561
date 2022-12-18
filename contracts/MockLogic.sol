@@ -1,9 +1,9 @@
 pragma solidity ^0.8.6;
 
-contract MockToken {
+contract MockLogic {
     event FallbackTriggered(address indexed a);
 
-    address governance;
+    address public governance;
     bool public ini;
     uint public state;
 
