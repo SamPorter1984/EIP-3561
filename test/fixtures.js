@@ -7,21 +7,16 @@ async function deployTrustMinimizedProxyFixture() {
   const trustMinimizedProxy = await TrustMinimizedProxy.deploy()
   const MockLogic = await ethers.getContractFactory('MockLogic')
   const mockLogic = await MockLogic.deploy()
-  return { trustMinimizedProxy, owner, otherAccount, mockLogic, acc2 }
+  return [trustMinimizedProxy, owner, otherAccount, mockLogic, acc2]
 }
 
 async function trustMinimizedProxyWithMockLogicFixture() {
-  const res = await deployTrustMinimizedProxyFixture()
-  const owner = res.owner,
-    otherAccount = res.otherAccount,
-    acc2 = res.acc2,
-    trustMinimizedProxy = res.trustMinimizedProxy,
-    mockLogic = res.mockLogic
+  const [trustMinimizedProxy, owner, otherAccount, mockLogic, acc2] = await deployTrustMinimizedProxyFixture()
   const iMockToken = new ethers.utils.Interface(MockTokenABI.abi)
   const init = iMockToken.encodeFunctionData('init', [otherAccount.address])
   await trustMinimizedProxy.proposeTo(mockLogic.address, init)
   const trustMinimizedProxyWithLogic = await mockLogic.attach(trustMinimizedProxy.address)
-  return { trustMinimizedProxy, trustMinimizedProxyWithLogic, owner, otherAccount, mockLogic, acc2 }
+  return [trustMinimizedProxy, trustMinimizedProxyWithLogic, owner, otherAccount, mockLogic, acc2]
 }
 
 module.exports = {

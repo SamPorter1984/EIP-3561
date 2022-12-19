@@ -17,54 +17,34 @@ let trustMinimizedProxyWithLogic = {}
 
 describe('TrustMinimizedProxy', () => {
   beforeEach('deploy fixture', async () => {
-    const fixture = await loadFixture(deployTrustMinimizedProxyFixture)
-    owner = fixture.owner
-    otherAccount = fixture.otherAccount
-    trustMinimizedProxy = fixture.trustMinimizedProxy
-    mockLogic = fixture.mockLogic
+    //prettier-ignore
+    [trustMinimizedProxy, owner, otherAccount, mockLogic] = await loadFixture(deployTrustMinimizedProxyFixture)
   })
   describe('Initialization', () => {
     it('Slot addresses to call are valid', async () => {
-      const adminSlot = ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('eip1967.proxy.admin')))
-        .sub(ethers.BigNumber.from(1))
-        .toHexString()
-      expect(adminSlot).to.equal(ADMIN_SLOT)
-      const logicSlot = ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('eip1967.proxy.implementation')))
-        .sub(ethers.BigNumber.from(1))
-        .toHexString()
-      expect(logicSlot).to.equal(LOGIC_SLOT)
-      const nextLogicSlot = ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('eip3561.proxy.next.logic')))
-        .sub(ethers.BigNumber.from(1))
-        .toHexString()
-      expect(nextLogicSlot).to.equal(NEXT_LOGIC_SLOT)
-      const nextLogicBlockSlot = ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('eip3561.proxy.next.logic.block')))
-        .sub(ethers.BigNumber.from(1))
-        .toHexString()
-      expect(nextLogicBlockSlot).to.equal(NEXT_LOGIC_BLOCK_SLOT)
-      const proposeBlockSlot = ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('eip3561.proxy.propose.block')))
-        .sub(ethers.BigNumber.from(1))
-        .toHexString()
-      expect(proposeBlockSlot).to.equal(PROPOSE_BLOCK_SLOT)
-      const zeroTrustPeriodSlot = ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('eip3561.proxy.zero.trust.period')))
-        .sub(ethers.BigNumber.from(1))
-        .toHexString()
-      expect(zeroTrustPeriodSlot).to.equal(ZERO_TRUST_PERIOD_SLOT)
+      const tuples = [
+        { _: ADMIN_SLOT, __: 'eip1967.proxy.admin' },
+        { _: LOGIC_SLOT, __: 'eip1967.proxy.implementation' },
+        { _: NEXT_LOGIC_SLOT, __: 'eip3561.proxy.next.logic' },
+        { _: NEXT_LOGIC_BLOCK_SLOT, __: 'eip3561.proxy.next.logic.block' },
+        { _: PROPOSE_BLOCK_SLOT, __: 'eip3561.proxy.propose.block' },
+        { _: ZERO_TRUST_PERIOD_SLOT, __: 'eip3561.proxy.zero.trust.period' },
+      ]
+      for (let n = 0; n < tuples.length; n++) {
+        let slot = await ethers.BigNumber.from(ethers.utils.keccak256(ethers.utils.toUtf8Bytes(tuples[n].__)))
+          .sub(ethers.BigNumber.from(1))
+          .toHexString()
+        expect(slot).to.equal(tuples[n]._)
+      }
     })
     it('Initial ADMIN_SLOT, LOGIC_SLOT, NEXT_LOGIC_SLOT, NEXT_LOGIC_BLOCK_SLOT, PROPOSE_BLOCK_SLOT, ZERO_TRUST_PERIOD_SLOT initial values', async () => {
       const adminAddress = ethers.utils.getAddress(ethers.utils.hexStripZeros(await ethers.provider.getStorageAt(trustMinimizedProxy.address, ADMIN_SLOT)))
       expect(adminAddress).to.equal(owner.address)
-      let slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, LOGIC_SLOT)
-      expect(slotVal).to.equal(ethers.constants.HashZero)
-      slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, NEXT_LOGIC_SLOT)
-      expect(slotVal).to.equal(ethers.constants.HashZero)
-      slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, NEXT_LOGIC_BLOCK_SLOT)
-      expect(slotVal).to.equal(ethers.constants.HashZero)
-      slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, PROPOSE_BLOCK_SLOT)
-      expect(slotVal).to.equal(ethers.constants.HashZero)
-      slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, PROPOSE_BLOCK_SLOT)
-      expect(slotVal).to.equal(ethers.constants.HashZero)
-      slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, ZERO_TRUST_PERIOD_SLOT)
-      expect(slotVal).to.equal(ethers.constants.HashZero)
+      const slotAddresses = [LOGIC_SLOT, NEXT_LOGIC_SLOT, NEXT_LOGIC_BLOCK_SLOT, PROPOSE_BLOCK_SLOT, ZERO_TRUST_PERIOD_SLOT]
+      for (let n = 0; n < slotAddresses.length; n++) {
+        let slotVal = await ethers.provider.getStorageAt(trustMinimizedProxy.address, slotAddresses[n])
+        expect(slotVal).to.equal(ethers.constants.HashZero)
+      }
     })
   })
 
@@ -228,12 +208,7 @@ describe('TrustMinimizedProxy', () => {
 
 describe('MockLogic', () => {
   beforeEach('deploy fixture', async () => {
-    const fixture = await loadFixture(trustMinimizedProxyWithMockLogicFixture)
-    owner = fixture.owner
-    otherAccount = fixture.otherAccount
-    trustMinimizedProxyWithLogic = fixture.trustMinimizedProxyWithLogic
-    mockLogic = fixture.mockLogic
-    trustMinimizedProxy = fixture.trustMinimizedProxy
+    ;[trustMinimizedProxy, trustMinimizedProxyWithLogic, owner, otherAccount] = await loadFixture(trustMinimizedProxyWithMockLogicFixture)
     trustMinimizedProxyWithLogic = trustMinimizedProxyWithLogic.connect(otherAccount)
     trustMinimizedProxy = trustMinimizedProxy.connect(otherAccount)
   })
