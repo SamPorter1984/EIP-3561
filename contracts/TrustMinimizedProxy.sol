@@ -1,6 +1,7 @@
 pragma solidity >=0.8.0; //important
 
 // EIP-3561 trust minimized proxy implementation https://github.com/ethereum/EIPs/blob/master/EIPS/eip-3561.md
+// Based on EIP-1967 upgradeability proxy: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1967.md
 
 contract TrustMinimizedProxy {
     event Upgraded(address indexed toLogic);
